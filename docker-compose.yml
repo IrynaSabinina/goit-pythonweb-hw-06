@@ -1,0 +1,19 @@
+version: "3"
+services:
+  db:
+    image: postgres
+    container_name: students-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: students_db
+    ports:
+      - "5432:5432"
+
+  app:
+    build: .
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgresql://postgres:secret@localhost:5432/students_db
+    command: ["poetry", "run", "python", "main.py"]
